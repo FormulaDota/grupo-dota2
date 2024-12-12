@@ -1,28 +1,6 @@
 import NextAuth from 'next-auth'
-import DiscordProvider from 'next-auth/providers/discord'
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import { prisma } from '@/lib/prisma'
+import { authConfig } from '../auth.config'
 
-const handler = NextAuth({
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID!,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
-    }),
-    // Steam authentication will be implemented separately due to its specific requirements
-  ],
-  callbacks: {
-    async session({ session, user }) {
-      return {
-        ...session,
-        user: {
-          ...session.user,
-          id: user.id,
-        },
-      }
-    },
-  },
-})
+const handler = NextAuth(authConfig)
 
 export { handler as GET, handler as POST }
