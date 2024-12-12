@@ -1,13 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { NextAuthProvider } from '@/components/providers/NextAuthProvider'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export const metadata: Metadata = {
-  title: 'FormulaDota - Serviço de MMR Boost',
-  description: 'Aumente seu MMR no Dota 2 com nossa equipe profissional',
+  title: 'Rankeds em grupo Dota 2',
+  description: 'Encontre grupos para jogar Dota 2',
 }
 
 export default function RootLayout({
@@ -17,10 +13,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
-        <NextAuthProvider>
-          {children}
-        </NextAuthProvider>
+      <body className="bg-gray-900 text-white">
+        {children}
       </body>
     </html>
   )
