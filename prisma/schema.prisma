@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  steamId       String    @unique
+  discordId     String    @unique
+  phone         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  queueEntries  QueueEntry[]
+}
+
+model Package {
+  id          String    @id @default(cuid())
+  mmrAmount   Int
+  price       Float
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  queueEntries QueueEntry[]
+}
+
+model QueueEntry {
+  id          String    @id @default(cuid())
+  userId      String
+  packageId   String
+  status      String    // "WAITING", "IN_PROGRESS", "COMPLETED"
+  currentMmr  Int       // Current MMR progress
+  targetMmr   Int       // Target MMR to achieve
+  isPresent   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  matches     Match[]
+  user        User      @relation(fields: [userId], references: [id])
+  package     Package   @relation(fields: [packageId], references: [id])
+}
+
+model Match {
+  id            String    @id @default(cuid())
+  queueEntryId  String
+  result        String    // "WIN" or "LOSS"
+  mmrChange     Int
+  tokenUsed     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  queueEntry    QueueEntry @relation(fields: [queueEntryId], references: [id])
+}
